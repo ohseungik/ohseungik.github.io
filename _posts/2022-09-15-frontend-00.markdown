@@ -1,0 +1,77 @@
+---
+title: "프론트앤드 학습 사이트 정리"
+layout: post
+date: "2022-09-15 11:00:00 +0900"
+headerImage: false
+tag:
+- study
+category: blog
+author: ohseungik
+description: 스터디
+---
+
+## [Udemy](https://www.udemy.com/)
+
+미국 온라인교육 플랫폼. 영어로 된 강의가 있다.
+
+## [생활코딩](https://opentutorials.org/course/1)
+
+기초적인 개념설명, 꾸준한 컨텐츠 업데이트를 하는 블로그, 유튜브
+
+## [Poiemaweb 문서](https://poiemaweb.com/)
+
+Javascript Deep Dive의 저자분이 운영하고 있는 사이트
+
+## [모던 자바스크립트 튜토리얼](https://ko.javascript.info/)
+
+개념을 다시 잡기에 좋은 사이트. 
+
+## [노마드 코더](https://nomadcoders.co/)
+
+클론코딩을 배울 수 있는 사이트.
+
+## [edwith](https://www.edwith.org/)
+
+네이버 커넥트재단에서 운영하는 사이트. 고퀄리티의 부스트 코스.
+
+## [프로그래머스](https://programmers.co.kr/)
+
+코딩 테스트, 과제, 채용 정보를 알 수 있는 사이트.
+
+## [코드스피츠](https://www.youtube.com/channel/UCKXBpFPbho1tp-Ntlfc25kA)
+
+기초적인 개념 설명을 유튜브로 해주는 사이트.
+
+## [우아한 Tech](https://www.youtube.com/c/%EC%9A%B0%EC%95%84%ED%95%9CTech)
+
+현재 프론트앤드의 대한 기업 생각들을 알 수 있는 사이트.
+
+## [인프런](https://www.inflearn.com/)
+
+다양한 학습 관련 컨텐츠들이 있는 사이트.
+
+## [드림코딩](https://academy.dream-coding.com/)
+
+유료 영상이 많은 사이트. 코스별로 구분.
+
+## [NextStep](https://edu.nextstep.camp/)
+
+자기자율주도 학습 스터디를 지원하는 사이트. 온라인 진행.
+
+## [우아한테크코스](https://woowacourse.github.io/)
+
+우아한에서 지원하는 강의 사이트.
+
+## [부스트코스](https://www.boostcourse.org/)
+
+비영리 SW 온라인 플랫폼. 무료가 많음.
+
+
+
+
+
+
+
+
+
+
