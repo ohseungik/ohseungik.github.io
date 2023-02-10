@@ -1,0 +1,100 @@
+---
+title: "React 18에 추가된 flushsync 기능"
+layout: post
+date: "2023-02-10 11:00:00 +0900"
+headerImage: false
+tag:
+- study
+category: blog
+author: ohseungik
+description: 스터디
+---
+
+# React 18에 추가된 flushsync 기능
+
+## React18 state 배칭
+
+React18에서는 많은 상태를 업데이트 하여도 단 한번만 리렌더링 하였습니다. 예를 들면 다음과 같습니다.
+
+```
+function handleClick() {
+  setCount(c => c + 1); // 리렌더링 안함
+  setCount2(counter => counter + 1); // 리렌더링 안함
+  // 리렌더링 함
+}
+```
+
+setCount 이후 setCount2가 실행되기 전에 count 값을 DOM에 리렌더링 시키고 싶을때는 어떻게 해야되는걸까? 할 때 사용하는 것이 flushsync 입니다.
+해당 함수를 사용하는 예시는 다음과 같습니다.
+
+## 예시
+
+getList에 의해 list가 추가되고, list의 맨 하단으로 스크롤 되도록 하는 코드입니다. 하지만 실제는 list가 추가되기 바로 직전까지 스크롤이 내려갑니다.
+
+```
+import React, { useState } from "react";
+
+const Index = () => {
+  const [list, setList] = useState([]);
+
+  const handleOk = () => {
+    setList([...list, { id: uuid(), task: input }]);
+    listRef.current.scrollTop = listRef.current.scrollHeight;
+  };
+
+  return (
+    <section>
+      <h1>Lists</h1>
+      <ul ref={listRef} style={{ height: 200, overflowY: "auto" }}>
+        {list.map(list => (
+          <li key={list.id}>{list.task}</li>
+        ))}
+      </ul>
+      <AddTodo handleOk={handleOk} />
+    </section>
+  );
+};
+
+export default Index;
+```
+
+이유는 useState가 동기적으로 실행 되지 않기 때문에 setList에 새로운 list가 들어가기 전에 이미 스크롤이 내려가 버리기 때문입니다.
+즉, react가 원하는대로 한번만 리랜더링 되는 것이 아니라 setList가 실행될 때 한번, 스크롤이 내려갈 때 한번 리랜더링이 되어야 원하는대로 동작하게 됩니다.
+이렇게 동작하기 위해 flushsync가 필요합니다.
+
+## flushsync
+
+비동기적인 코드를 강제로 동기적으로 만들고 react에서 리랜더링을 강제하도록 합니다. 
+
+```
+import React, { useState } from "react";
+import { flushSync } from "react-dom";
+
+const Index = () => {
+  const [list, setList] = useState([]);
+
+  const handleOk = () => {
+    flushSync(() => {
+        setList([...list, { id: uuid(), task: input }]);
+    })
+
+    listRef.current.scrollTop = listRef.current.scrollHeight;
+  };
+
+  return (
+    <section>
+      <h1>Lists</h1>
+      <ul ref={listRef} style={{ height: 200, overflowY: "auto" }}>
+        {list.map(list => (
+          <li key={list.id}>{list.task}</li>
+        ))}
+      </ul>
+      <AddTodo handleOk={handleOk} />
+    </section>
+  );
+};
+
+export default Index;
+```
+
+이제 handleOk가 끝나지 않아도 배칭을 나누게 되었고 setList에 의해 list에 새로운 값이 추가될 때 까지 기다리다가 그 다음 스크롤 코드가 동작하게 됩니다.
