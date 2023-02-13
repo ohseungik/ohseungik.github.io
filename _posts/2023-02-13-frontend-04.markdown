@@ -1,0 +1,185 @@
+---
+title: "react-redux 사용법"
+layout: post
+date: "2023-02-10 11:00:00 +0900"
+headerImage: false
+tag:
+- study
+category: blog
+author: ohseungik
+description: 스터디
+---
+
+# react-redux 사용법
+
+## 사용하는 이유
+
+### state 종속성 탈피
+
+우리는 useState를 사용 할 경우에 컴포넌트 내부에서 state를 만들고, 함수로 state를 바꿉니다.
+그렇기 때문에 state는 컴포넌트에 종속되는 것은 당연한 결과입니다.
+redux는 컴포넌트에 종속되지 않고, 상태관리를 컴포넌트 바깥에서 할 수 있습니다.
+store 안에 state를 저장하고, 모든 컴포넌트는 store에 구독을 하면서 state와 그 state를 바꾸는 함수를 전달 받게 됩니다.
+함수를 바꿈으로 state가 바뀌면 해당 state를 바라보고 있는 컴포넌트는 모두 리랜더링 됩니다.
+
+
+### 하위 컴포넌트로 전달하는 로직 탈출
+
+우리가 원하는 state가 자식의 자식의 자식에서 사용한다면 redux를 사용하지 않으면 props을 주고 또 주고 또줍니다.
+또 그 state를 바꾸기 위한 함수도 또 주고 또 줄수 밖에 없습니다.
+이렇게 되면 나중에 코드 관리도 어렵고 코딩을 실수 할 수 밖에 없습니다.
+위에서 본 대로, redux의 store는 프로젝트 루트 레벨에 위치하고, 해당 store를 구독하는 컴포넌트는 모두 state와 state를 바꾸는 함수를 받을 수 있습니다.
+어느 위치에 있든 상관 없이 단 한번에 상태를 받을 수 있게 됩니다.
+
+### redux 기본 원리
+
+redux는 기본적으로 flux 패턴을 따릅니다.
+
+```
+
+Action -> Dispatch -> Store -> View
+
+```
+
+redux의 데이터 흐름은 동일하게 단방향으로 View(Component)에서 Dispatch(store에서 주는 state를 바꾸는 함수)라는 함수를 통해 Action(Dispatch 함수 이름)이 호출되고 reducer에 정의된 로직에 따라 store의 state가 변화하고 그 state를 쓰는 View(Component)가 변하는 흐름을 따릅니다.
+
+
+## React에서 redux 사용하기
+
+### 패키지 설치
+
+1. 사용 할 패키지를 설치합니다.
+2. redux-devtools-extension은 크롬 확장 프로그램에서 redux dev tools를 통해 설치 할 수 있고, redux의 데이터 흐름을 알아보기 쉽게 하기 위해 사용합니다.
+3. redux-logger는 redux를 통해 바뀔 이전 state, dispatch 실행으로 인해 바뀐 state가 콘솔에 찍혀 디버깅 쉽게 해주는 라이브러리입니다.
+
+```
+
+npm install --save redux react-redux redux-devtools-extension redux-logger
+
+```
+
+### reducer 정의
+
+1. reducer는 store에 들어갈 state와 state를 바꿀 함수를 정의하는 곳입니다.
+2. 불변성을 지켜야 하고, 순수함수로 코딩하여야 합니다.
+
+#### 불변성을 지켜야 하는 이유
+
+- 불변성을 지켜야 하는 이유는 redux는 이전 state와 바뀐 state를 구분하는 방법이 참조값이 바뀌었는지 확인하고, 참조값이 바뀌면, state가 바뀌었다고 redux가 인식하여, 해당 state를 사용하는 컴포넌트에게 리랜더링을 요청하기 때문입니다. 
+그렇기 때문에, state.text = action.test와 같이 직접적으로 state를 변경하면 참조값이 변하지 않아 redux는 값이 바뀌었다고 인식하지 않고 리랜더링 되지 않습니다. 
+state.test = {...test, action.test} 또는 immer 라는 라이브러리를 사용하여 쉽게 불변성을 유지합니다.
+
+
+### reducer sample
+
+1. rootReducer를 정의합니다.
+
+```
+// reducers/index.js
+
+/** root reducer */
+import { combineReducers } from "redux";
+import CountReducer from "./CountReducer";
+
+// 여러 reducer를 사용하는 경우 reducer를 하나로 묶어주는 메소드입니다.
+// store에 저장되는 리듀서는 오직 1개입니다.
+const rootReducer = combineReducers({
+  CountReducer
+});
+
+export default rootReducer;
+```
+
+2. CountReducer를 정의합니다.
+
+```
+// reducers/CountReducer.js
+
+// reducer가 많아지면 action상수가 중복될 수 있으니
+// 액션이름 앞에 파일 이름을 넣습니다.
+export const INCRESE = "COUNT/INCRESE";
+
+export const increseCount = count => ({ type: INCRESE, count });
+
+const initalState = {
+  count: 0
+};
+
+const CountReducer = (state = initalState, action) => {
+  switch (action.type) {
+    case INCRESE:
+      return {
+        ...state,
+        count: action.count
+      };
+
+    // default를 쓰지 않으면 맨처음 state에 count값이 undefined가 나옵니다 꼭! default문을 넣으세요
+    default:
+      return state;
+  }
+};
+```
+
+3. App에 Store 정의하고, 정의한 reducer를 적용.
+
+```
+// index.js
+import React from "react";
+import ReactDOM from "react-dom";
+import { createStore, applyMiddleware, compose } from "redux";
+import { Provider } from "react-redux";
+import logger from "redux-logger";
+import { composeWithDevTools } from "redux-devtools-extension";
+
+import App from "./App";
+import rootReducer from "./reducers";
+
+// 배포 레벨에서는 리덕스 발동시 찍히는 logger를 사용하지 않습니다.
+const enhancer =
+  process.env.NODE_ENV === "production"
+    ? compose(applyMiddleware())
+    : composeWithDevTools(applyMiddleware(logger));
+
+// 위에서 만든 reducer를 스토어 만들때 넣어줍니다
+const store = createStore(rootReducer, enhancer);
+
+ReactDOM.render(
+  // 만든 store를 앱 상위에 넣어줍니다.
+  <Provider store={store}>
+    <App />
+  </Provider>
+  document.getElementById('root'),
+);
+ 
+```
+
+ 4. 다른 컴포넌트에서 Redux를 이용하는 방법
+
+```
+import { useSelector, useDispatch } from "react-redux";
+import { increseCount } from "reducers/count";
+
+// dispatch를 사용하기 위한 준비
+const dispatch = useDispatch();
+
+// store에 접근하여 state 가져오기
+const { count } = useSelector(state => state.counter);
+
+const increse = () => {
+  // store에 있는 state 바꾸는 함수 실행
+  dispatch(increseCount());
+};
+
+const Counter = () => {
+  return (
+    <div>
+      {count}
+      <button onClick={increse}>증가</button>
+    </div>
+  );
+};
+
+export default Counter;
+```
+
+store에서 useDispatch, useSelector로 state와 적용할 함수를 가져와서 호출해주시면 됩니다.
