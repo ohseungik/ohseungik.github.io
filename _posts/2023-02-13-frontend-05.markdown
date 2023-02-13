@@ -1,0 +1,91 @@
+---
+title: "react-redux 사용법"
+layout: post
+date: "2023-02-13 11:00:00 +0900"
+headerImage: false
+tag:
+- study
+category: blog
+author: ohseungik
+description: 스터디
+---
+
+# redux-persist 사용법
+
+## 사용하는 이유
+
+redux store는 기존에는 페이지를 새로고침 할 경우에 상태가 초기화됩니다.
+이것에 대한 방안으로 브라우저 저장소에 reducer state를 저장하여 새로고침 하여도 저장소에 있는 데이터를 redux에 불러오는 형식을 사용하고 있습니다.
+위에서 말한 가져오는 로직을 위해 redux-persist를 사용합니다.
+
+### 설치법
+
+```
+
+npm install -D redux-persist
+
+```
+
+
+### reducer에 store 정의
+- localStorage에 저장하고 싶으면 redux-persist/lib/storage를 사용.
+- sessionStorage에 저장하고 싶으면 redux-persist/lib/storage/session를 사용.
+
+
+### reducer에 persistReducer 적용.
+```
+// reducers/index.js
+import { combineReducers } from "redux";
+➊ import { persistReducer } from "redux-persist";
+➋ import storage from "redux-persist/lib/storage";
+
+import auth from "./auth";
+import board from "./board";
+import studio from "./studio";
+
+➌ const persistConfig = {
+  key: "root",
+  // localStorage에 저장합니다.
+  storage,
+  // auth, board, studio 3개의 reducer 중에 auth reducer만 localstorage에 저장합니다.
+  whitelist: ["auth"]
+  // blacklist -> 그것만 제외합니다
+};
+
+export const rootReducer = combineReducers({
+  auth,
+  board,
+  studio
+});
+
+➍ export default persistReducer(persistConfig, rootReducer);
+```
+
+### store를 persist store로 변경.
+
+```
+// src/index.js
+
+import React from "react";
+import ReactDOM from "react-dom";
+import { createStore, applyMiddleware, compose } from "redux";
+import { Provider } from "react-redux";
+➊ import { persistStore } from "redux-persist";
+➋ import { PersistGate } from "redux-persist/integration/react";
+import App from "./App";
+import configureStore from "./store";
+import { rootReducer } from "./reducers";
+
+const store = createStore(rootReducer);
+➌ const persistor = persistStore(store);
+
+const Root = () => (
+  <Provider store={store}>
+    ➍ <PersistGate loading={null} persistor={persistor}>
+      <App />
+    </PersistGate>
+  </Provider>
+);
+
+ReactDOM.render(<Root />, document.getElementById("root"));
+```
