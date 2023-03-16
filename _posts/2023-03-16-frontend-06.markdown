@@ -1,7 +1,7 @@
 ---
 title: "회사 프로젝트 View 들 정리"
 layout: post
-date: "2023-02-13 11:00:00 +0900"
+date: "2023-03-16 11:00:00 +0900"
 headerImage: false
 tag:
 - study
@@ -11,6 +11,7 @@ description: 스터디
 ---
 
 # VestSign
+
 ![ex_VestSign](../assets/images/cert2.png)
 
 # TimeTracker
@@ -20,8 +21,6 @@ description: 스터디
 # FakeChecker Admin
 
 ![ex_FakeChecker_Admin](../assets/images/FakeCheckerAdmin.PNG)
-
-# Pinsign
 
 # Pinsign3.0 Admin
 
