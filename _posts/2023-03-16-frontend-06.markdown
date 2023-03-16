@@ -1,0 +1,40 @@
+---
+title: "회사 프로젝트 View 들 정리"
+layout: post
+date: "2023-02-13 11:00:00 +0900"
+headerImage: false
+tag:
+- study
+category: blog
+author: ohseungik
+description: 스터디
+---
+
+# VestSign
+![ex_VestSign](../assets/images/cert2.png)
+
+# TimeTracker
+
+![ex_TimeTracker](../assets/images/TimeTracker.PNG)
+
+# FakeChecker Admin
+
+![ex_FakeChecker_Admin](../assets/images/FakeCheckerAdmin.PNG)
+
+# Pinsign
+
+# Pinsign3.0 Admin
+
+![ex_Pinsign_Admin](../assets/images/Pinsign30Admin.PNG)
+
+# CertAuth
+
+![ex_CertAuth]
+(../assets/images/auth1.PNG)
+(../assets/images/auth2.PNG)
+(../assets/images/auth3.PNG)
+(../assets/images/auth4.PNG)
+(../assets/images/auth5.PNG)
+(../assets/images/auth6.PNG)
+(../assets/images/auth7.PNG)
+(../assets/images/auth8.PNG)
