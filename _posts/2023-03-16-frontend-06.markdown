@@ -29,12 +29,11 @@ description: 스터디
 
 # CertAuth
 
-![ex_CertAuth]
-(../assets/images/auth1.PNG)
-(../assets/images/auth2.PNG)
-(../assets/images/auth3.PNG)
-(../assets/images/auth4.PNG)
-(../assets/images/auth5.PNG)
-(../assets/images/auth6.PNG)
-(../assets/images/auth7.PNG)
-(../assets/images/auth8.PNG)
+![ex_CertAuth_1](../assets/images/auth1.PNG)
+![ex_CertAuth_2](../assets/images/auth2.PNG)
+![ex_CertAuth_3](../assets/images/auth3.PNG)
+![ex_CertAuth_4](../assets/images/auth4.PNG)
+![ex_CertAuth_5](../assets/images/auth5.PNG)
+![ex_CertAuth_6](../assets/images/auth6.PNG)
+![ex_CertAuth_7](../assets/images/auth7.PNG)
+![ex_CertAuth_8](../assets/images/auth8.PNG)
